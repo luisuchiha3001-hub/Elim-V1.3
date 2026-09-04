@@ -1,0 +1,147 @@
+:root {
+    --bg: #fff8fb;
+    --surface: #ffffff;
+    --text: #2b1f24;
+    --muted: #7d6671;
+    --pink: #f6c5d3;
+    --pink-strong: #f3a1b7;
+    --orange: #f7a67a;
+    --orange-soft: #f9d3c3;
+    --border: rgba(235, 210, 216, 0.7);
+    --shadow: 0 16px 40px rgba(229, 183, 195, 0.12);
+    --radius: 16px;
+}
+
+body.pedidos-body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    margin: 0;
+}
+
+.pedidos-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+}
+
+.pedido-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.pedido-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.pedido-head h3 {
+    font-size: 1.1rem;
+    color: #422b34;
+    margin-bottom: 4px;
+}
+
+.pedido-meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.pedido-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.pedido-detail-box {
+    background: #fffafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.pedido-detail-box strong {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.badge-pendiente { background: #fff3df; color: #a56b14; }
+.badge-pagado { background: #ebf7f0; color: #2f6b4f; }
+.badge-enviado { background: #eef4ff; color: #3157a3; }
+.badge-entregado { background: #ecf8f3; color: #287a59; }
+.badge-cancelado { background: #fdefee; color: #d9534f; }
+.badge-devuelto { background: #eaf7ef; color: #2b6b3f; }
+.badge-aprobada { background: #eaf7ef; color: #2b6b3f; }
+.badge-rechazada { background: #fdefee; color: #d9534f; }
+
+.form-pedido {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: end;
+}
+
+.form-pedido label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.form-pedido select,
+.form-pedido button {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: inherit;
+}
+
+.form-pedido select {
+    min-width: 180px;
+    background: #fff;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, var(--pink-strong) 0%, var(--orange) 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    color: var(--muted);
+}
+
+@media (max-width: 768px) {
+    .pedidos-shell { padding: 20px 14px 36px; }
+    .pedido-card { padding: 18px; }
+    .form-pedido { flex-direction: column; align-items: stretch; }
+}

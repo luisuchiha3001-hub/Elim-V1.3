@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes — Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/usuarios_admin.css}">
+</head>
+<body class="dash-body">
+
+<aside class="sidebar">
+    <div>
+        <div class="brand">
+            <h2>Elim</h2>
+            <small>Pijamas</small>
+        </div>
+
+        <p class="nav-label">Principal</p>
+        <ul class="nav-menu">
+            <li>
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fa-solid fa-gauge-high"></i> <span>Panel</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/pijamas/agregar}">
+                    <i class="fa-solid fa-plus"></i> <span>Agregar Pijama</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/pedidos}">
+                    <i class="fa-solid fa-truck-fast"></i> <span>Pedidos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/envios}">
+                    <i class="fa-solid fa-shipping-fast"></i> <span>Envíos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/usuarios}" class="active">
+                    <i class="fa-solid fa-user-group"></i> <span>Clientes</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="logout-section">
+        <a th:href="@{/logout}">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span>
+        </a>
+    </div>
+</aside>
+
+<div class="dashboard-container">
+
+    <header class="dash-header">
+        <div>
+            <h1>Gestión de Usuarios</h1>
+            <span>Administra, edita o inactiva las cuentas registradas en el sistema.</span>
+        </div>
+    </header>
+
+    <section class="search-container">
+        <form method="GET" th:action="@{/admin/usuarios}" class="search-form">
+            <input
+                    type="text"
+                    name="buscar_documento"
+                    class="search-input"
+                    placeholder="Buscar cliente por número de documento..."
+                    th:value="${busqueda}"
+            >
+            <button type="submit" class="btn-dash btn-primary">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+            </button>
+            <a th:if="${busqueda != null && !busqueda.isEmpty()}" th:href="@{/admin/usuarios}" class="btn-dash" style="background:#7d6671; color:white;">Limpiar</a>
+        </form>
+    </section>
+
+    <main class="table-section">
+        <div class="table-header">
+            <h2>Lista de Usuarios</h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Nombre Completo</th>
+                    <th>Correo Electrónico</th>
+                    <th>Teléfono</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(usuarios)}">
+                    <td colspan="7" style="text-align: center; color: var(--muted); padding: 40px;">
+                        <i class="fa-solid fa-user-xmark" style="font-size: 2rem; display:block; margin-bottom: 10px; color: var(--pink-strong);"></i>
+                        No se encontraron usuarios con los criterios de búsqueda establecidos.
+                    </td>
+                </tr>
+
+                <tr th:each="user : ${usuarios}">
+                    <td><strong th:text="${user.documento}">123456789</strong></td>
+                    <td th:text="${user.nombres + ' ' + (user.apellidos != null ? user.apellidos : '')}">Nombre Completo</td>
+                    <td th:text="${user.correo}">correo@ejemplo.com</td>
+                    <td th:text="${user.telefono != null ? user.telefono : 'No registrado'}">3000000000</td>
+                    <td th:text="${user.nombreRol != null ? user.nombreRol : 'Cliente'}">Cliente</td>
+                    <td>
+                        <span th:if="${user.estado == 1 || user.estado == null}" class="badge badge-ok">Activo</span>
+                        <span th:if="${user.estado != null && user.estado != 1}" class="badge badge-out">Inactivo</span>
+                    </td>
+                    <td>
+                        <div class="actions-cell">
+                            <a th:href="@{/admin/usuarios/editar(documento=${user.documento})}" class="btn-action btn-edit" title="Editar Rol/Datos">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </a>
+
+                            <form method="POST" th:action="@{/admin/usuarios/eliminar}" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                                <input type="hidden" name="documento" th:value="${user.documento}">
+                                <button type="submit" class="btn-action btn-delete" title="Eliminar usuario">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</div>
+
+<script th:src="@{/js/usuarios.js}"></script>
+</body>
+</html>

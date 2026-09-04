@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devoluciones — Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/pedidos.css}">
+</head>
+<body class="pedidos-body">
+<aside class="sidebar">
+    <div>
+        <div class="brand">
+            <h2>Elim</h2>
+            <small>Pijamas</small>
+        </div>
+
+        <p class="nav-label">Principal</p>
+        <ul class="nav-menu">
+            <li>
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fa-solid fa-gauge-high"></i> <span>Panel</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/pijamas/agregar}">
+                    <i class="fa-solid fa-plus"></i> <span>Agregar Pijama</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/pedidos}">
+                    <i class="fa-solid fa-truck-fast"></i> <span>Pedidos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/envios}">
+                    <i class="fa-solid fa-shipping-fast"></i> <span>Envíos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/devoluciones}" class="active">
+                    <i class="fa-solid fa-rotate-left"></i> <span>Devoluciones</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/usuarios}">
+                    <i class="fa-solid fa-user-group"></i> <span>Clientes</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="logout-section">
+        <a th:href="@{/logout}">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span>
+        </a>
+    </div>
+</aside>
+
+<div class="dashboard-container">
+    <div class="pedidos-shell">
+        <div class="dash-header">
+            <div>
+                <h1>Gestión de devoluciones</h1>
+                <span th:text="${pedidoId != null && pedidoId > 0} ? 'Gestionando devoluciones del pedido #' + ${pedidoId} : 'Revisa y actualiza el estado de las solicitudes de devolución.'">
+            Revisa y actualiza el estado de las solicitudes de devolución.
+          </span>
+            </div>
+            <div class="header-actions">
+                <a th:href="@{/admin/pedidos}" class="btn-dash btn-primary">Volver a pedidos</a>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <div class="alert alert-success" th:if="${param.success != null}" th:text="${param.success}">Éxito</div>
+        <div class="alert alert-error" th:if="${param.error != null}" th:text="${param.error}">Error</div>
+
+        <!-- Lista de devoluciones -->
+        <div th:if="${devoluciones != null && !#lists.isEmpty(devoluciones)}">
+            <section class="pedido-card" th:each="devolucion : ${devoluciones}">
+                <div class="pedido-head">
+                    <div>
+                        <h3>Devolución #<span th:text="${devolucion.idDevolucion}">1</span> · Pedido #<span th:text="${devolucion.idPedido}">100</span></h3>
+                        <div class="pedido-meta">
+                            <span th:text="${devolucion.nombreCliente}">Juan Pérez</span> · <span th:text="${devolucion.correo}">correo@ejemplo.com</span>
+                        </div>
+                    </div>
+
+                    <!-- Badges dinamicos de estado -->
+                    <span class="badge"
+                          th:classappend="${devolucion.estadoDevolucion == 'Aprobada' ? 'badge-aprobada' : (devolucion.estadoDevolucion == 'Rechazada' ? 'badge-rechazada' : 'badge-pendiente')}"
+                          th:text="${devolucion.estadoDevolucion == 'Solicitada' ? 'Pendiente' : (devolucion.estadoDevolucion == 'En revision' ? 'En revisión' : (devolucion.estadoDevolucion == 'Aprobada' ? 'Devuelto' : (devolucion.estadoDevolucion == 'Rechazada' ? 'Cancelado' : devolucion.estadoDevolucion)))}">
+              Pendiente
+            </span>
+                </div>
+
+                <div class="pedido-details">
+                    <div class="pedido-detail-box">
+                        <strong>Fecha de devolución</strong>
+                        <span th:text="${devolucion.fechaDevolucion != null ? devolucion.fechaDevolucion : '-'}">-</span>
+                    </div>
+                    <div class="pedido-detail-box">
+                        <strong>Motivo</strong>
+                        <span th:text="${devolucion.motivo != null ? devolucion.motivo : '-'}">-</span>
+                    </div>
+                    <div class="pedido-detail-box">
+                        <strong>Producto</strong>
+                        <span th:text="${devolucion.nombreProducto != null ? devolucion.nombreProducto : 'Sin producto'}">Producto</span>
+                    </div>
+                    <div class="pedido-detail-box">
+                        <strong>Cantidad devuelta</strong>
+                        <span th:text="${devolucion.cantidadDevuelta != null ? devolucion.cantidadDevuelta : 0}">0</span>
+                    </div>
+                </div>
+
+                <form class="form-pedido" th:action="@{/admin/devoluciones/actualizar}" method="POST">
+                    <input type="hidden" name="idDevolucion" th:value="${devolucion.idDevolucion}">
+                    <input type="hidden" name="idPedidoFk" th:value="${devolucion.idPedido}">
+                    <label>
+                        Estado de la devolución
+                        <select name="estadoDevolucion">
+                            <option value="Solicitada" th:selected="${devolucion.estadoDevolucion == 'Solicitada'}">Pendiente</option>
+                            <option value="En revision" th:selected="${devolucion.estadoDevolucion == 'En revision'}">En revisión</option>
+                            <option value="Aprobada" th:selected="${devolucion.estadoDevolucion == 'Aprobada'}">Devuelto</option>
+                            <option value="Rechazada" th:selected="${devolucion.estadoDevolucion == 'Rechazada'}">Cancelado</option>
+                        </select>
+                    </label>
+                    <button type="submit" class="btn-save">Guardar cambios</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="empty-state" th:if="${devoluciones == null || #lists.isEmpty(devoluciones)}">
+            <h3>No hay devoluciones registradas</h3>
+            <p>Las solicitudes de devolución aparecerán aquí cuando existan.</p>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

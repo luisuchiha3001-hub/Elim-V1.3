@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de compras — Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/categorias.css}">
+</head>
+<body class="catalogo-body">
+
+<header class="main-navbar">
+    <div class="nav-logo">
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Elim Pijamas" class="logo-img-nav">
+        </a>
+        <div class="logo-text">
+            <span class="brand-title">elim</span>
+            <span class="brand-subtitle">pijamas</span>
+        </div>
+    </div>
+    <div class="nav-actions">
+        <a th:href="@{/}" class="btn-nav-link">Volver al inicio</a>
+        <a th:href="@{/catalogo/bebes}" class="btn-nav-link">Seguir comprando</a>
+    </div>
+</header>
+
+<main class="catalogo-page">
+    <section class="catalogo-header">
+        <span class="section-tag">TU COMPRA</span>
+        <h1>Carrito de compras</h1>
+        <p>Revisa tus prendas seleccionadas y continúa con la compra.</p>
+    </section>
+
+    <!-- Estado si hay productos en el carrito -->
+    <section class="carrito-layout" th:if="${items != null && !items.empty}">
+        <div class="carrito-lista">
+            <article class="carrito-item" th:each="item : ${items}">
+
+                <!-- Imagen con validación de fallback -->
+                <img th:src="${item.imagen != null && !#strings.isEmpty(item.imagen)} ? @{'/images/' + ${item.imagen}} : @{/images/logo.png}"
+                     th:alt="${item.nombre}"
+                     class="carrito-img">
+
+                <div class="carrito-info">
+                    <h3 th:text="${item.nombre}">Nombre Producto</h3>
+                    <p>Cantidad: <span th:text="${item.cantidad}">1</span></p>
+                    <strong th:text="'$' + ${#numbers.formatInteger(item.precio * item.cantidad, 0, 'POINT')}">$0</strong>
+                </div>
+
+                <form method="POST" th:action="@{/carrito/eliminar}">
+                    <input type="hidden" name="id_producto" th:value="${item.id}">
+                    <button type="submit" class="btn-eliminar"><i class="fa-solid fa-trash"></i></button>
+                </form>
+            </article>
+        </div>
+
+        <aside class="carrito-resumen">
+            <h3>Resumen</h3>
+            <div class="resumen-linea">
+                <span>Subtotal</span>
+                <strong th:text="'$' + ${#numbers.formatInteger(subtotal, 0, 'POINT')}">$0</strong>
+            </div>
+            <div class="resumen-linea">
+                <span>Envío</span>
+                <strong>Gratis</strong>
+            </div>
+            <div class="resumen-total">
+                <span>Total</span>
+                <strong th:text="'$' + ${#numbers.formatInteger(subtotal, 0, 'POINT')}">$0</strong>
+            </div>
+            <a th:href="@{/carrito/finalizar}" class="btn-carrito btn-resumen">Finalizar compra</a>
+        </aside>
+    </section>
+
+    <!-- Estado Vacío -->
+    <div class="empty-state" th:unless="${items != null && !items.empty}">
+        <i class="fa-solid fa-cart-shopping empty-icon"></i>
+        <p>Tu carrito está vacío por ahora.</p>
+    </div>
+</main>
+
+</body>
+</html>

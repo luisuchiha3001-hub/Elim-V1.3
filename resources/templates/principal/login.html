@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Ruta CSS estática -->
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body class="auth-body">
+<div class="auth-shell">
+    <aside class="auth-aside" aria-hidden="true">
+        <!-- Ruta Imagen en static/images/imagen3.jpg -->
+        <img th:src="@{/images/imagen3.jpg}" alt="Elim Pijamas" class="auth-aside-img">
+    </aside>
+
+    <main class="auth-main">
+        <a th:href="@{/}" class="volver"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+
+        <div class="auth-card">
+            <h1>Bienvenida de vuelta</h1>
+            <p class="subtitulo">Inicia sesión para continuar con tu rincón de confort.</p>
+
+            <!-- Alerta de Error (Soporta parámetros de URL y atributos de Model) -->
+            <div th:if="${param.error != null}" class="alerta error" th:text="${param.error}">
+                Credenciales incorrectas. Inténtalo de nuevo.
+            </div>
+            <div th:if="${error != null && !error.isEmpty()}" class="alerta error" th:text="${error}">
+                Credenciales incorrectas. Inténtalo de nuevo.
+            </div>
+
+            <!-- Alerta de Éxito (Soporta parámetros de URL y atributos de Model) -->
+            <div th:if="${param.exito != null}" class="alerta" style="color: #2f6b4f; border-color: #2f6b4f; background: #eefbee;" th:text="${param.exito}">
+                Operación realizada con éxito.
+            </div>
+            <div th:if="${exito != null && !exito.isEmpty()}" class="alerta" style="color: #2f6b4f; border-color: #2f6b4f; background: #eefbee;" th:text="${exito}">
+                Operación realizada con éxito.
+            </div>
+
+            <!-- Formulario POST hacia la ruta /login -->
+            <form th:action="@{/login}" method="POST" class="auth-form">
+                <div class="campo">
+                    <label for="correo_login">Correo electrónico</label>
+                    <input type="email" id="correo_login" name="correo_login" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+
+                <div class="campo">
+                    <label for="clave_login">Contraseña</label>
+                    <div class="input-password">
+                        <input type="password" id="clave_login" name="clave_login" placeholder="••••••••" required>
+                        <button type="button" class="toggle-pass" onclick="togglePass('clave_login', this)" aria-label="Mostrar contraseña">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-auth">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                </button>
+            </form>
+
+            <p class="auth-foot">
+                ¿No tienes cuenta? <a th:href="@{/registro}">Regístrate aquí</a>
+            </p>
+        </div>
+    </main>
+</div>
+
+<!-- JS en static/js/auth.js -->
+<script th:src="@{/js/auth.js}"></script>
+</body>
+</html>

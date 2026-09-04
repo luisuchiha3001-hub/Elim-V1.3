@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pijama — Elim Pijamas</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-body">
+<div class="auth-shell">
+    <main class="auth-main" style="padding: 40px 50px;">
+        <a th:href="@{/admin/dashboard}" class="volver">
+            <i class="fa-solid fa-arrow-left"></i> Volver al panel
+        </a>
+
+        <div class="auth-card">
+            <h1>Editar pijama</h1>
+            <p class="subtitulo">Actualiza el producto seleccionado.</p>
+
+            <div class="alerta error" th:if="${param.error != null}" th:text="${param.error}">
+                Error al actualizar
+            </div>
+
+            <form th:action="@{/admin/pijamas/actualizar}" method="POST" enctype="multipart/form-data" class="auth-form">
+
+                <input type="hidden" name="idProducto" th:value="${producto != null ? producto.idProducto : ''}">
+
+                <div class="campo">
+                    <label for="nombre_producto">Nombre del producto</label>
+                    <input type="text" id="nombre_producto" name="nombreProducto" th:value="${producto != null ? producto.nombreProducto : ''}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="descripcion">Descripción</label>
+                    <input type="text" id="descripcion" name="descripcion" th:value="${producto != null ? producto.descripcion : ''}">
+                </div>
+
+                <div class="campo">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" step="0.01" min="0" th:value="${producto != null ? producto.precio : ''}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" name="stock" min="0" th:value="${producto != null ? producto.stock : ''}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="imagen">Imagen del producto</label>
+                    <input type="file" id="imagen" name="imagen" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif">
+                    <small th:if="${producto != null && producto.imagenUrl != null}" style="display:block;margin-top:6px;color:#7d6671;">
+                        Archivo actual: <span th:text="${producto.imagenUrl}">imagen.jpg</span>
+                    </small>
+                </div>
+
+                <div class="campo">
+                    <label for="id_categoria_fk">Categoría</label>
+                    <select id="id_categoria_fk" name="idCategoria" required>
+                        <option value="">Seleccione...</option>
+                        <option th:each="cat : ${categorias}"
+                                th:value="${cat.idCategoria}"
+                                th:text="${cat.nombreCategoria}"
+                                th:selected="${producto != null && cat.idCategoria == producto.idCategoria}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="estado">Estado</label>
+                    <select id="estado" name="estado">
+                        <option value="Disponible" th:selected="${producto != null && producto.estado == 'Disponible'}">Disponible</option>
+                        <option value="Agotado" th:selected="${producto != null && producto.estado == 'Agotado'}">Agotado</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-auth">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar cambios
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>
