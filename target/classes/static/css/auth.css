@@ -1,0 +1,355 @@
+/* ==========================================================================
+   ESTILOS DE AUTENTICACIÓN - ELIM PIJAMAS (LÍNEA ESTÉTICA PASTEL)
+   ========================================================================== */
+
+:root {
+    --bg: #fff8fb;
+    --surface: #ffffff;
+    --text: #2b1f24;
+    --muted: #7d6671;
+    --pink: #f6c5d3;
+    --pink-strong: #f3a1b7;
+    --orange: #f7a67a;
+    --orange-soft: #f9d3c3;
+    --border: rgba(235, 210, 216, 0.8);
+    --shadow: 0 24px 80px rgba(229, 183, 195, 0.18);
+    --radius: 16px;
+    --radius-lg: 32px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Fondo unificado con la estética del Index */
+.auth-body {
+    font-family: 'Montserrat', sans-serif !important;
+    color: var(--text);
+    background: radial-gradient(circle at top left, rgba(247, 170, 187, 0.22), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(247, 166, 122, 0.2), transparent 35%),
+    var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Contenedor Cascarón */
+.auth-shell {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    width: 100%;
+    max-width: 1050px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden; /* Corta cualquier desbordamiento de la imagen en las esquinas */
+    min-height: 620px;
+    align-items: stretch;
+}
+
+/* Panel Izquierdo: Contenedor de la imagen HTML */
+.auth-aside {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden; /* Garantiza que la imagen no se escape de su propia celda */
+    isolation: isolate;
+}
+
+/* Control estricto para evitar que la imagen se rompa o se agrande */
+.auth-aside-img {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Llena el espacio perfectamente sin deformar la pijama */
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* Capa de filtro de color pastel sobre la imagen */
+.auth-aside::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(247, 166, 122, 0.3) 0%, rgba(243, 161, 183, 0.4) 100%);
+    z-index: 2; /* Se sobrepone obligatoriamente a la imagen */
+    pointer-events: none;
+}
+
+/* Panel Derecho: Formulario */
+.auth-main {
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Enlace Volver elegante */
+.auth-main .volver {
+    position: absolute;
+    top: 32px;
+    left: 60px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-main .volver:hover {
+    color: var(--pink-strong);
+    transform: translateX(-3px);
+}
+
+.auth-card {
+    width: 100%;
+}
+
+/* Títulos con Playfair Display igual al branding */
+.auth-card h1 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 2.3rem;
+    color: #422b34;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.02em;
+}
+
+.auth-card .subtitulo {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 32px 0;
+}
+
+/* Formularios y Campos */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #422b34;
+    letter-spacing: 0.02em;
+}
+
+.campo input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.campo input::placeholder {
+    color: #c5b3bc;
+}
+
+.campo input:focus {
+    border-color: var(--pink-strong);
+    background: #fffbfe;
+    box-shadow: 0 0 0 4px rgba(243, 161, 183, 0.15);
+}
+
+/* Input Password Contenedor */
+.input-password {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password input {
+    padding-right: 50px;
+}
+
+/* Botón Ojo de la Contraseña */
+.toggle-pass {
+    position: absolute;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-pass:hover {
+    color: var(--pink-strong);
+}
+
+/* Alertas de error elegantes */
+.alerta {
+    font-size: 0.9rem;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alerta.error {
+    color: #9b2c2c;
+    background: #fff0f2;
+    border: 1px solid rgba(155, 44, 44, 0.2);
+}
+
+/* Botón de Envío con degradado Elim */
+.btn-auth {
+    margin-top: 10px;
+    width: 100%;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--pink-strong) 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(243, 161, 183, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(243, 161, 183, 0.5);
+}
+
+.btn-auth:active {
+    transform: translateY(0);
+}
+
+/* Enlaces del Pie */
+.auth-foot {
+    margin-top: 32px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.auth-foot a {
+    color: var(--pink-strong);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.auth-foot a:hover {
+    color: var(--orange);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   ADAPTACIÓN RESPONSIVA (MOBILE FRIENDLY)
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .auth-shell {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        min-height: auto;
+    }
+
+    .auth-aside {
+        display: none; /* Oculta la sección de la imagen en móviles */
+    }
+
+    .auth-main {
+        padding: 40px 30px;
+    }
+
+    .auth-main .volver {
+        top: 24px;
+        left: 30px;
+    }
+
+    .auth-card h1 {
+        margin-top: 24px;
+        font-size: 1.9rem;
+    }
+}
+
+/* ==========================================================================
+   EXTENSIONES PARA EL FORMULARIO DE REGISTRO MULTI-COLUMNA
+   ========================================================================== */
+
+.fila-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Forzar que las cajas de selección (select) mantengan la misma estética */
+.campo select {
+    width: 100%;
+    padding: 14px 18px;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+    transition: all 0.25s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%237d6671' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+}
+
+.campo select:focus {
+    border-color: var(--pink-strong);
+    box-shadow: 0 0 0 4px rgba(243, 161, 183, 0.15);
+}
+
+/* Asegurar el escalado responsive en dispositivos móviles */
+@media (max-width: 600px) {
+    .fila-campos {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

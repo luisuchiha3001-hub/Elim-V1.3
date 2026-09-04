@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regístrate - Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Ruta CSS en static/css/auth.css -->
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body class="auth-body">
+<div class="auth-shell">
+
+    <aside class="auth-aside" aria-hidden="true">
+        <!-- Ruta Imagen en static/images/imagen1.jpg -->
+        <img th:src="@{/images/imagen1.jpg}" alt="Elim Pijamas" class="auth-aside-img">
+    </aside>
+
+    <main class="auth-main">
+        <a th:href="@{/}" class="volver"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+
+        <div class="auth-card" style="margin-top: 20px;">
+            <h1>Crear Cuenta</h1>
+            <p class="subtitulo">Únete a nosotros y encuentra tu rincón de confort ideal.</p>
+
+            <!-- Alerta de Error -->
+            <div th:if="${param.error}" class="alerta error" th:text="${param.error}">
+                Ocurrió un error en el registro.
+            </div>
+
+            <!-- Alerta de Éxito -->
+            <div th:if="${param.exito}" class="alerta" style="color: #2f6b4f; border-color: #2f6b4f; background: #eefbee;" th:text="${param.exito}">
+                ¡Registro completado con éxito!
+            </div>
+
+            <!-- Formulario POST a la ruta /registro -->
+            <form th:action="@{/registro}" method="POST" class="auth-form" id="formRegistro" autocomplete="off">
+
+                <div class="fila-campos">
+                    <div class="campo">
+                        <label for="tipo_documento">Tipo de documento</label>
+                        <select id="tipo_documento" name="tipo_documento" required>
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
+                            <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+                            <option value="PPT">PPT (Permiso por Protección Temporal)</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="documento">Número de documento</label>
+                        <input type="text" id="documento" name="documento" placeholder="Máx. 10 dígitos" maxlength="10" required>
+                    </div>
+                </div>
+
+                <div class="fila-campos">
+                    <div class="campo">
+                        <label for="nombres">Nombres</label>
+                        <input type="text" id="nombres" name="nombres" placeholder="Tu nombre" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos" placeholder="Tu apellido" required>
+                    </div>
+                </div>
+
+                <div class="fila-campos">
+                    <div class="campo">
+                        <label for="correo">Correo electrónico</label>
+                        <input type="email" id="correo" name="correo" placeholder="ejemplo@gmail.com" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="telefono">Teléfono móvil</label>
+                        <input type="text" id="telefono" name="telefono" placeholder="Inicia con 3" maxlength="10" required>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label for="direccion">Dirección de residencia</label>
+                    <input type="text" id="direccion" name="direccion" placeholder="Calle, Carrera, Barrio..." required>
+                </div>
+
+                <div class="fila-campos">
+                    <div class="campo">
+                        <label for="password">Contraseña</label>
+                        <div class="input-password">
+                            <input type="password" id="password" name="password" placeholder="••••••••" required>
+                            <button type="button" class="toggle-pass" onclick="togglePass('password', this)" aria-label="Mostrar contraseña">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <label for="confirm_password">Confirmar contraseña</label>
+                        <div class="input-password">
+                            <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                            <button type="button" class="toggle-pass" onclick="togglePass('confirm_password', this)" aria-label="Mostrar contraseña">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-auth" style="margin-top: 15px;">
+                    <i class="fa-solid fa-user-plus"></i> Registrarme
+                </button>
+            </form>
+
+            <p class="auth-foot">
+                ¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión aquí</a>
+            </p>
+        </div>
+    </main>
+</div>
+
+<!-- JS en static/js/registro.js -->
+<script th:src="@{/js/registro.js}"></script>
+</body>
+</html>

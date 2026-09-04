@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Caballeros — Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/categorias.css}">
+</head>
+<body class="catalogo-body">
+
+<header class="main-navbar">
+    <div class="nav-logo">
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Elim Pijamas" class="logo-img-nav">
+        </a>
+        <div class="logo-text">
+            <span class="brand-title">elim</span>
+            <span class="brand-subtitle">pijamas</span>
+        </div>
+    </div>
+
+    <div class="nav-actions">
+        <div class="categories-menu">
+            <button type="button" class="btn-nav-link categories-trigger">Categorías</button>
+            <div class="categories-dropdown">
+                <a th:href="@{/catalogo/bebes}" class="category-link">Bebés</a>
+                <a th:href="@{/catalogo/damas}" class="category-link">Damas</a>
+                <a th:href="@{/catalogo/ninos}" class="category-link">Niños</a>
+            </div>
+        </div>
+
+        <a th:href="@{/admin/dashboard}" class="btn-nav-link">Volver al Panel</a>
+
+        <a th:href="@{/carrito}" class="btn-nav-link btn-carrito-nav">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Carrito</span>
+            <span class="cart-badge" th:if="${contadorCarrito > 0}" th:text="${contadorCarrito}">0</span>
+        </a>
+    </div>
+</header>
+
+<main class="catalogo-page">
+    <section class="catalogo-header">
+        <span class="section-tag">ROPA PARA DORMIR</span>
+        <h1>Colección Caballeros</h1>
+        <p>Diseños cómodos, relajados y con personalidad para disfrutar de la noche con estilo.</p>
+    </section>
+
+    <section class="catalogo-grid">
+        <article class="producto-card" th:each="prod : ${productos}" th:if="${not #lists.isEmpty(productos)}">
+            <div class="img-container">
+                <img th:src="${prod.imagenUrl != null ? '/images/' + prod.imagenUrl : '/images/logo.png'}"
+                     th:alt="${prod.nombreProducto}"
+                     class="producto-img">
+
+                <span class="badge-estado badge-out" th:if="${prod.stock == 0}">Agotado</span>
+                <span class="badge-estado badge-low" th:if="${prod.stock > 0 and prod.stock < 6}">Bajo Stock</span>
+                <span class="badge-estado badge-ok" th:if="${prod.stock >= 6}">Disponible</span>
+            </div>
+
+            <div class="producto-info">
+                <h3 th:text="${prod.nombreProducto}">Nombre Producto</h3>
+                <p class="descripcion" th:text="${prod.descripcion != null and !prod.descripcion.isEmpty() ? prod.descripcion : 'Sin descripción disponible.'}">Descripción</p>
+
+                <div class="producto-meta">
+                    <span class="precio" th:text="'$' + ${#numbers.formatInteger(prod.precio, 0, 'POINT')}">$0</span>
+                    <span class="stock-tag">
+              <i class="fa-solid fa-boxes-stacked"></i> <span th:text="${prod.stock}">0</span> uds
+            </span>
+                </div>
+
+                <form th:action="@{/carrito/agregar}" method="POST" class="carrito-form">
+                    <input type="hidden" name="idProducto" th:value="${prod.idProducto}">
+                    <button type="submit" class="btn-carrito" th:disabled="${prod.stock == 0}">
+                        <i class="fa-solid fa-cart-plus"></i> Añadir al carrito
+                    </button>
+                </form>
+            </div>
+        </article>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(productos)}">
+            <i class="fa-solid fa-person empty-icon"></i>
+            <p>No hay productos disponibles en la categoría Caballeros por el momento.</p>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

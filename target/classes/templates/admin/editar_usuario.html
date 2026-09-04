@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario — Elim Pijamas</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-body">
+<div class="auth-shell">
+    <main class="auth-main" style="padding: 40px 50px;">
+        <a th:href="@{/admin/usuarios}" class="volver">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </a>
+
+        <div class="auth-card">
+            <h1>Editar usuario</h1>
+            <p class="subtitulo">Actualiza los datos del cliente seleccionado.</p>
+
+            <!-- Mensajes de alerta -->
+            <div class="alerta error" th:if="${error != null || param.error != null}" th:text="${error != null ? error : param.error}">
+                Ocurrió un error.
+            </div>
+
+            <div class="alerta" style="color:#2f6b4f; background:#eefbee; border-color:#2f6b4f;" th:if="${param.exito != null}" th:text="${param.exito}">
+                Operación exitosa.
+            </div>
+
+            <form th:if="${usuario != null}" th:action="@{/admin/usuarios/actualizar}" method="POST" class="auth-form">
+                <input type="hidden" name="documentoOriginal" th:value="${usuario.documento}">
+
+                <div class="campo">
+                    <label>Documento</label>
+                    <input type="text" th:value="${usuario.documento}" disabled>
+                    <input type="hidden" name="documento" th:value="${usuario.documento}">
+                </div>
+
+                <div class="campo">
+                    <label>Tipo de documento</label>
+                    <input type="text" th:value="${usuario.tipoDocumento}" disabled>
+                    <input type="hidden" name="tipoDocumento" th:value="${usuario.tipoDocumento}">
+                </div>
+
+                <div class="campo">
+                    <label for="nombres">Nombres</label>
+                    <input type="text" id="nombres" name="nombres" th:value="${usuario.nombres}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" id="apellidos" name="apellidos" th:value="${usuario.apellidos}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="correo">Correo</label>
+                    <input type="email" id="correo" name="correo" th:value="${usuario.correo}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" id="telefono" name="telefono" th:value="${usuario.telefono}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" id="direccion" name="direccion" th:value="${usuario.direccion}" required>
+                </div>
+
+                <div class="campo">
+                    <label for="id_rol_fk">Rol</label>
+                    <select id="id_rol_fk" name="idRolFk" required>
+                        <option value="1" th:selected="${usuario.idRolFk == 1}">Administrador</option>
+                        <option value="2" th:selected="${usuario.idRolFk == 2}">Cliente</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-auth">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar cambios
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

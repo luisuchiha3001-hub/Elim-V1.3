@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Elim Pijamas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body class="dash-body">
+
+<aside class="sidebar">
+    <div>
+        <div class="brand">
+            <h2>Elim</h2>
+            <small>Pijamas</small>
+        </div>
+
+        <p class="nav-label">Principal</p>
+        <ul class="nav-menu">
+            <li>
+                <a th:href="@{/admin/dashboard}" class="active">
+                    <i class="fa-solid fa-gauge-high"></i> <span>Panel</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/pijamas/agregar}">
+                    <i class="fa-solid fa-plus"></i> <span>Agregar Pijama</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/pedidos}">
+                    <i class="fa-solid fa-truck-fast"></i> <span>Pedidos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/envios}">
+                    <i class="fa-solid fa-shipping-fast"></i> <span>Envíos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/devoluciones}">
+                    <i class="fa-solid fa-rotate-left"></i> <span>Devoluciones</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/usuarios}">
+                    <i class="fa-solid fa-user-group"></i> <span>Clientes</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="logout-section">
+        <a th:href="@{/logout}">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span>
+        </a>
+    </div>
+</aside>
+
+<div class="dashboard-container">
+
+    <header class="dash-header">
+        <div>
+            <h1>¡Hola, <span th:text="${primerNombre != null ? primerNombre : 'Administrador'}">Administrador</span>!</h1>
+            <span>Bienvenido al panel de gestión de Elim Pijamas.</span>
+        </div>
+    </header>
+
+    <section class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-info">
+                <p>Catálogo</p>
+                <h3 th:text="${totalProductos != null ? totalProductos : 0}">0</h3>
+            </div>
+            <div class="metric-icon icon-pink">
+                <i class="fa-solid fa-shirt"></i>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-info">
+                <p>Stock Crítico</p>
+                <h3 th:text="${stockBajo != null ? stockBajo : 0}">0</h3>
+            </div>
+            <div class="metric-icon icon-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-info">
+                <p>Pedidos</p>
+                <h3 th:text="${totalVentas != null ? totalVentas : 0}">0</h3>
+            </div>
+            <div class="metric-icon icon-orange">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-info">
+                <p>Ingresos</p>
+                <h3 th:text="${'$' + #numbers.formatInteger(ingresosTotales != null ? ingresosTotales : 0, 0, 'POINT')}">$0</h3>
+            </div>
+            <div class="metric-icon icon-success">
+                <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+        </div>
+    </section>
+
+    <main class="table-section">
+        <div class="table-header">
+            <h2>Inventario de Prendas</h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Prenda / Descripción</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="prod : ${productos}" th:if="${not #lists.isEmpty(productos)}">
+                    <td>
+                        <img th:src="${prod.imagenUrl != null ? '/images/' + prod.imagenUrl : '/images/logo.png'}"
+                             alt="Pijama" class="prod-img">
+                    </td>
+                    <td>
+                        <strong th:text="${prod.nombreProducto}">Nombre Producto</strong>
+                    </td>
+                    <td th:text="${prod.categoria != null ? prod.categoria.nombreCategoria : 'Sin categoría'}">Categoría</td>
+                    <td><strong th:text="'$' + ${#numbers.formatInteger(prod.precio, 0, 'POINT')}">$0</strong></td>
+                    <td th:text="${prod.stock + ' uds'}">0 uds</td>
+                    <td>
+                        <span class="badge badge-out" th:if="${prod.stock == 0}">Agotado</span>
+                        <span class="badge badge-low" th:if="${prod.stock > 0 and prod.stock < 6}">Bajo Stock</span>
+                        <span class="badge badge-ok" th:if="${prod.stock >= 6}">Disponible</span>
+                    </td>
+                    <td>
+                        <div class="actions-cell">
+                            <a th:href="@{/admin/pijamas/editar/{id}(id=${prod.idProducto})}" class="btn-action btn-edit" title="Editar">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <button type="button" class="btn-action btn-delete" th:onclick="'confirmarBorrado(' + ${prod.idProducto} + ')'" title="Eliminar">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(productos)}">
+                    <td colspan="7" style="text-align: center; color: var(--muted); padding: 40px;">
+                        <i class="fa-solid fa-folder-open" style="font-size: 2rem; display:block; margin-bottom: 10px; color: var(--pink-strong);"></i>
+                        No hay pijamas registradas en el catálogo actual.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>
